@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Threading.Tasks;
+
+namespace SimpleLogin.Helper
+{
+    public class SessionHelper
+    {
+        public static string GetValue(IPrincipal User, string Property)
+        {
+            var r = ((ClaimsIdentity)User.Identity).FindFirst(Property);
+            return r == null ? "" : r.Value;
+        }
+
+        public static List<string> GetRoles(IPrincipal User)
+        {
+            var r = ((ClaimsIdentity)User.Identity).FindAll(ClaimTypes.Role).ToList();
+            var array = new List<string>();
+            foreach(var s in r){
+                array.Add(s.Value);
+            }
+            return array;
+        }
+
+        public static string GetNameIdentifier(IPrincipal User)
+        {
+            var r = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+            return r == null ? "" : r.Value;
+        }
+
+        public static string GetName(IPrincipal User)
+        {
+            var r = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name);
+            return r == null ? "" : r.Value;
+        }
+    }
+}
